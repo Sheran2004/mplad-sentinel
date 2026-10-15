@@ -8,8 +8,8 @@
   },
   "scripts": {
     "dev": "node --env-file=.env scripts/with-app-env.mjs vite dev --host 0.0.0.0 --port 8080",
-    "build": "node scripts/with-app-env.mjs vite build && npm run db:migrate && npm run db:seed",
-    "db:migrate": "node --env-file=.env scripts/migrate.mjs",
+    "build": "node scripts/with-app-env.mjs vite build",
+    "db:migrate": "node scripts/migrate.mjs",
     "data:import": "node --env-file-if-exists=.env --experimental-strip-types scripts/seed.mjs",
     "db:seed": "node --env-file-if-exists=.env --experimental-strip-types scripts/seed.mjs",
     "build:dev": "node scripts/with-app-env.mjs vite build --mode development",
