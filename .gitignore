@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.vercel/
+.env
+.env.*
+!.env.example
+*.log
+screenshots/
+.grok/
+.DS_Store
+.pglite-data/
+*.tmp.mjs

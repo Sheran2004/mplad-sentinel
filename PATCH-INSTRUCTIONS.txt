@@ -1,0 +1,17 @@
+MPLAD Sentinel patch instructions
+
+1. Stop the dev server (Ctrl+C).
+2. Extract this ZIP into the ROOT of your existing bIP3pXmSMH0AArP5-grok-workspace folder.
+3. Allow overwrite for these three files:
+   - README.md
+   - src/lib/official-import.ts
+   - src/lib/official-records.ts
+4. Do not replace .env and do not share your real GROQ_API_KEY or DATABASE_URL.
+5. Run:
+   npm run typecheck
+   npm test
+   npm run lint
+   npm run build
+6. Start again with npm run dev and follow the final manual QA checklist in README.md.
+
+This patch hardens CSV/server-side import validation and updates documentation. It does NOT add an official government API integration, multi-user authorization, or independently verify imported data.
