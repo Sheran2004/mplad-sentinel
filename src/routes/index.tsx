@@ -29,9 +29,10 @@ function App() {
   const [chatWork, setChatWork] = useState<string | undefined>();
   const [casesKey, setCasesKey] = useState(0);
   const [session, setSession] = useState<Session | null>(null);
+  const [sessionState, setSessionState] = useState<"loading" | "ready" | "error">("loading");
   const [showLogin, setShowLogin] = useState(false);
   const t = COPY[lang];
-  const refreshSession = () => getSession().then(setSession, () => setSession(null));
+  const refreshSession = () => getSession().then((x) => { setSession(x); setSessionState("ready"); }, () => setSessionState("error"));
   useEffect(() => { void refreshSession(); }, []);
   const TABS: Tab[] = session?.user?.role === "admin" ? ["overview", "works", "members", "cases", "method", "admin"] : ["overview", "works", "members", "cases", "method"];
   const locked = Boolean(session?.requireLogin && !session.user);
@@ -66,7 +67,7 @@ function App() {
           {session?.user ? (
             <button className="h-9 rounded-lg border border-line px-3 text-sm" title={session.user.email}
               onClick={async () => { await signOut(); setTab("overview"); await refreshSession(); }}>{t.auth.signOut} ({session.user.role})</button>
-          ) : session?.accountsConfigured ? (
+          ) : session?.accountsConfigured && !locked ? (
             <button className="h-9 rounded-lg border border-gold px-3 text-sm text-gold" onClick={() => setShowLogin(true)}>{t.auth.signIn}</button>
           ) : null}
           <button className="grid h-9 w-9 place-items-center rounded-lg border border-line" aria-label="Toggle theme" onClick={() => {
@@ -77,13 +78,13 @@ function App() {
         </div>
       </header>
 
-      {session && !session.accountsConfigured && (
+      {sessionState === "ready" && session && !session.accountsConfigured && (
         <p className="mb-4 rounded-lg border border-warn/40 bg-warn/10 p-3 text-sm">{t.auth.openMode}</p>
       )}
-      {locked ? <LoginForm t={t} onDone={() => void refreshSession()} /> : showLogin && !session?.user ? (
-        <div className="mb-6"><LoginForm t={t} onDone={() => { setShowLogin(false); void refreshSession(); }} /></div>
+      {sessionState === "loading" ? <p className="text-muted">{t.auth.checking}</p> : sessionState === "error" ? <p className="rounded-lg border border-danger/40 bg-danger/10 p-3 text-sm text-danger">{t.auth.sessionError}</p> : locked ? <LoginForm t={t} registrationOpen={session?.registrationOpen ?? false} inviteCodeRequired={session?.inviteCodeRequired ?? false} onDone={() => void refreshSession()} /> : showLogin && !session?.user ? (
+        <div className="mb-6"><LoginForm t={t} registrationOpen={session?.registrationOpen ?? false} inviteCodeRequired={session?.inviteCodeRequired ?? false} onDone={() => { setShowLogin(false); void refreshSession(); }} /></div>
       ) : null}
-      {!locked && (<>
+      {sessionState === "ready" && !locked && (<>
       <nav className="mb-5 flex gap-1 overflow-x-auto border-b border-line" aria-label="Sections">
         {TABS.map((k) => (
           <button key={k} onClick={() => setTab(k)} className={`px-4 py-2 text-sm whitespace-nowrap ${tab === k ? "border-b-2 border-gold font-semibold text-gold" : "text-muted"}`}>{t.tabs[k]}</button>

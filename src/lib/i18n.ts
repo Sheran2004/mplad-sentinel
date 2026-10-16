@@ -1,7 +1,7 @@
 export type Lang = "en" | "hi" | "hing";
 
 const en = {
-  auth: { signIn: "Sign in", signOut: "Sign out", email: "Email", password: "Password", title: "Sign in to MPLAD Sentinel", openMode: "No accounts are configured: anyone can edit. Set ADMIN_EMAIL and ADMIN_PASSWORD to enable accounts.", users: "Users", addUser: "Add user", name: "Name", role: "Role", audit: "Audit log", disable: "Disable", enable: "Enable", resetPw: "Reset password", create: "Create", active: "Active", disabled: "Disabled", last: "Last login" },
+  auth: { signIn: "Sign in", signOut: "Sign out", email: "Email", password: "Password", title: "Sign in to MPLAD Sentinel", openMode: "No accounts are configured: anyone can edit. Set ADMIN_EMAIL and ADMIN_PASSWORD to enable accounts.", users: "Users", addUser: "Add user", name: "Name", role: "Role", audit: "Audit log", disable: "Disable", enable: "Enable", resetPw: "Reset password", create: "Create", active: "Active", disabled: "Disabled", last: "Last login", createAccount: "Create account", toRegister: "New here? Create an account", toSignIn: "Already have an account? Sign in", code: "Invite code", fullName: "Full name", registerHint: "New accounts can view everything. An admin can allow you to edit review status and notes.", checking: "Checking your session…", sessionError: "Could not reach the server. Please refresh." },
   name: "MPLAD Sentinel",
   tag: "Screening desk for MPLADS completed works",
   note: "Data is an unverified export of the official MPLADS dashboard. Indicators are screening signals for human review, not proof of fraud.",
@@ -22,7 +22,7 @@ const en = {
 type Copy = typeof en;
 
 const hing: Copy = {
-  auth: { signIn: "Sign in", signOut: "Sign out", email: "Email", password: "Password", title: "MPLAD Sentinel mein sign in karo", openMode: "Koi account configure nahi hai: koi bhi edit kar sakta hai. Accounts ke liye ADMIN_EMAIL aur ADMIN_PASSWORD set karo.", users: "Users", addUser: "User jodo", name: "Naam", role: "Role", audit: "Audit log", disable: "Disable", enable: "Enable", resetPw: "Password reset", create: "Banao", active: "Active", disabled: "Disabled", last: "Last login" },
+  auth: { signIn: "Sign in", signOut: "Sign out", email: "Email", password: "Password", title: "MPLAD Sentinel mein sign in karo", openMode: "Koi account configure nahi hai: koi bhi edit kar sakta hai. Accounts ke liye ADMIN_EMAIL aur ADMIN_PASSWORD set karo.", users: "Users", addUser: "User jodo", name: "Naam", role: "Role", audit: "Audit log", disable: "Disable", enable: "Enable", resetPw: "Password reset", create: "Banao", active: "Active", disabled: "Disabled", last: "Last login", createAccount: "Account banao", toRegister: "Naye ho? Account banao", toSignIn: "Account hai? Sign in karo", code: "Invite code", fullName: "Poora naam", registerHint: "Naye account se sab kuch dekh sakte ho. Review status aur notes edit karne ki permission admin deta hai.", checking: "Session check ho raha hai…", sessionError: "Server tak nahi pahunch paye. Page refresh karo." },
   name: "MPLAD Sentinel",
   tag: "MPLADS ke completed works ki screening desk",
   note: "Data official MPLADS dashboard ka unverified export hai. Indicators sirf screening ke liye hain, fraud ka proof nahi.",
@@ -41,7 +41,7 @@ const hing: Copy = {
 };
 
 const hi: Copy = {
-  auth: { signIn: "साइन इन", signOut: "साइन आउट", email: "ईमेल", password: "पासवर्ड", title: "MPLAD Sentinel में साइन इन करें", openMode: "कोई खाता कॉन्फ़िगर नहीं है: कोई भी संपादन कर सकता है। खाते चालू करने के लिए ADMIN_EMAIL और ADMIN_PASSWORD सेट करें।", users: "उपयोगकर्ता", addUser: "उपयोगकर्ता जोड़ें", name: "नाम", role: "भूमिका", audit: "ऑडिट लॉग", disable: "निष्क्रिय करें", enable: "सक्रिय करें", resetPw: "पासवर्ड रीसेट", create: "बनाएँ", active: "सक्रिय", disabled: "निष्क्रिय", last: "अंतिम लॉगिन" },
+  auth: { signIn: "साइन इन", signOut: "साइन आउट", email: "ईमेल", password: "पासवर्ड", title: "MPLAD Sentinel में साइन इन करें", openMode: "कोई खाता कॉन्फ़िगर नहीं है: कोई भी संपादन कर सकता है। खाते चालू करने के लिए ADMIN_EMAIL और ADMIN_PASSWORD सेट करें।", users: "उपयोगकर्ता", addUser: "उपयोगकर्ता जोड़ें", name: "नाम", role: "भूमिका", audit: "ऑडिट लॉग", disable: "निष्क्रिय करें", enable: "सक्रिय करें", resetPw: "पासवर्ड रीसेट", create: "बनाएँ", active: "सक्रिय", disabled: "निष्क्रिय", last: "अंतिम लॉगिन", createAccount: "खाता बनाएँ", toRegister: "नए हैं? खाता बनाएँ", toSignIn: "खाता है? साइन इन करें", code: "आमंत्रण कोड", fullName: "पूरा नाम", registerHint: "नया खाता सब कुछ देख सकता है। समीक्षा स्थिति और टिप्पणी बदलने की अनुमति एडमिन देता है।", checking: "सत्र जाँचा जा रहा है…", sessionError: "सर्वर तक नहीं पहुँच सके। कृपया पेज रीफ़्रेश करें।" },
   name: "एमपीलैड सेंटिनल",
   tag: "एमपीलैड्स पूर्ण कार्यों की स्क्रीनिंग डेस्क",
   note: "डेटा आधिकारिक एमपीलैड्स डैशबोर्ड का असत्यापित निर्यात है। संकेतक केवल जाँच हेतु हैं, धोखाधड़ी का प्रमाण नहीं।",

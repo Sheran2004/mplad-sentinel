@@ -54,16 +54,28 @@ first request (about 10 s once). `PGLITE_DIR=.pglite-data` keeps it on disk so r
 
 ## Accounts and roles
 
+Login comes first: once an admin account exists, visitors see only the **Sign in / Create account** screen; no data is
+shown (and the API refuses requests) until they sign in.
+
 | Role | Can do |
 | --- | --- |
-| viewer | Read everything |
+| viewer | Read everything, use the AI desk. **Self-service sign-ups start here.** |
 | reviewer | + change review status, write notes |
-| admin | + manage users, read the audit log |
+| admin | + manage users and roles, read the audit log |
 
-Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` (10+ chars) in the environment: the first admin is created on startup if that
-email does not exist. Further users are created in the **Admin** tab. `SESSION_SECRET` (32+ random chars) is **required in
-production**. `REQUIRE_LOGIN=true` hides the data from signed-out visitors too. With no accounts configured the app is in
-open mode (fine for local use; a banner says so). The last active admin cannot be demoted or disabled.
+Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` (10+ chars): the first admin is created on startup if that email does not exist.
+Admins promote people to reviewer in the **Admin** tab. `SESSION_SECRET` (32+ random chars) is **required in production**.
+
+| Variable | Effect |
+| --- | --- |
+| `REQUIRE_LOGIN` | empty = automatic (login required once an admin exists); `false` = public read-only dashboard; `true` = always |
+| `ALLOW_REGISTRATION` | empty = sign-up open; `false` = closed, admins create users |
+| `REGISTRATION_CODE` | if set, sign-up also needs this invite code (recommended for public deployments) |
+
+Safeguards: failed-login lockout (5 tries / 10 min per email) and sign-up rate limit (8 / hour per IP) are stored in the
+database so they hold on serverless hosts; passwords are scrypt-hashed; the session cookie is httpOnly and signed; the
+last active admin cannot be demoted or disabled. With no accounts configured the app is in open mode (local use only).
+There is no email verification or password-reset email: an admin resets passwords.
 
 ## Deploy (Vercel + Neon/Postgres)
 
@@ -105,6 +117,7 @@ Tests: `npm run test:dataset` (parsers, merge/dedupe, every rule, password hashi
    from the dashboard to get genuine Rajya Sabha works.
 2. **The export has no vendor, sanctioned amount, physical progress, geo-tag or bills.** Rules that need
    them are deliberately not faked. Indicators are triage signals; confirm on documents and site visits.
-3. **Auth is deliberately simple** (email/password, no email verification, no self-service password reset, no 2FA).
-   An admin resets passwords. Fine for a small review team; add SSO/2FA before wider rollout.
+3. **Auth is deliberately simple** (email/password, no email verification, no password-reset email, no 2FA). Anyone can
+   create a read-only account unless you set `REGISTRATION_CODE` or `ALLOW_REGISTRATION=false`. Fine for a small team;
+   add email verification/SSO/2FA before a wide public rollout.
 4. Never commit `.env`. If a key was ever shared or committed, revoke it and create a new one.

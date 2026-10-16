@@ -12,7 +12,12 @@ export const getSession = createServerFn({ method: "GET" }).handler(async () => 
   const { sql, s } = await ready();
   const user = await s.getActor(sql);
   const accounts = await s.accountsExist(sql);
-  return { user, accountsConfigured: accounts, requireLogin: s.requireLogin(), canWrite: user ? user.role !== "viewer" : !accounts && !s.requireLogin() };
+  const required = await s.loginRequired(sql);
+  return {
+    user, accountsConfigured: accounts, requireLogin: required,
+    registrationOpen: await s.registrationOpen(sql), inviteCodeRequired: s.inviteCodeRequired(),
+    canWrite: user ? user.role !== "viewer" : !accounts && !required,
+  };
 });
 
 export const signIn = createServerFn({ method: "POST" })
@@ -23,6 +28,16 @@ export const signIn = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { sql, s } = await ready();
     return s.login(sql, data.email, data.password);
+  });
+
+export const registerAccount = createServerFn({ method: "POST" })
+  .validator((i: unknown) => {
+    const v = (i ?? {}) as Record<string, unknown>;
+    return { name: String(v.name ?? "").slice(0, 200), email: String(v.email ?? "").slice(0, 250), password: String(v.password ?? "").slice(0, 250), code: String(v.code ?? "").slice(0, 200) };
+  })
+  .handler(async ({ data }) => {
+    const { sql, s } = await ready();
+    return s.register(sql, data);
   });
 
 export const signOut = createServerFn({ method: "POST" }).handler(async () => {
