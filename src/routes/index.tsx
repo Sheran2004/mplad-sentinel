@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
+import { AccountDialog } from "@/components/AccountDialog";
 import { AdminTab } from "@/components/AdminTab";
 import { LoginForm } from "@/components/LoginForm";
 import { getSession, signOut } from "@/lib/auth-api";
@@ -31,6 +32,7 @@ function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [sessionState, setSessionState] = useState<"loading" | "ready" | "error">("loading");
   const [showLogin, setShowLogin] = useState(false);
+  const [showAccount, setShowAccount] = useState(false);
   const t = COPY[lang];
   const refreshSession = () => getSession().then((x) => { setSession(x); setSessionState("ready"); }, () => setSessionState("error"));
   useEffect(() => { void refreshSession(); }, []);
@@ -65,8 +67,11 @@ function App() {
             </button>
           ))}
           {session?.user ? (
+            <>
+            <button className="h-9 rounded-lg border border-line px-3 text-sm" title={session.user.email} onClick={() => setShowAccount(true)}>{session.user.name.split(" ")[0]}</button>
             <button className="h-9 rounded-lg border border-line px-3 text-sm" title={session.user.email}
               onClick={async () => { await signOut(); setTab("overview"); await refreshSession(); }}>{t.auth.signOut} ({session.user.role})</button>
+            </>
           ) : session?.accountsConfigured && !locked ? (
             <button className="h-9 rounded-lg border border-gold px-3 text-sm text-gold" onClick={() => setShowLogin(true)}>{t.auth.signIn}</button>
           ) : null}
@@ -98,6 +103,7 @@ function App() {
       {tab === "method" && <MethodTab t={t} />}
       {tab === "admin" && session?.user?.role === "admin" && <AdminTab t={t} />}
 
+      {showAccount && session?.user && <AccountDialog t={t} email={session.user.email} onClose={() => setShowAccount(false)} />}
       {openWork && <WorkDrawer code={openWork} t={t} canWrite={session?.canWrite ?? false} signedIn={Boolean(session?.user)} onNeedLogin={() => { closeDrawer(); setShowLogin(true); }} onClose={closeDrawer} onAsk={(c) => { setChatWork(c); setChatOpen(true); }} />}
       <ChatPanel t={t} lang={lang} open={chatOpen} setOpen={setChatOpen} workCode={chatWork} setWorkCode={setChatWork} />
       </>)}

@@ -31,14 +31,25 @@ export function MembersTab({ t, onViewWorks }: { t: Copy; onViewWorks: (mpKey: s
       {res.error && <ErrorNote message={res.error} />}
       <Card>
         <div className="mb-2 flex items-center justify-between text-sm text-muted">
-          <span>{data ? `${data.total} members` : t.loading}</span>
+          <span>{data ? `${data.total} ${t.x.members}` : t.loading}</span>
           <span className="flex items-center gap-2">
             <button className={inputCls} disabled={page <= 0} onClick={() => setPage(page - 1)}>{t.prev}</button>
             <span>{page + 1} / {pages}</span>
             <button className={inputCls} disabled={page + 1 >= pages} onClick={() => setPage(page + 1)}>{t.next}</button>
           </span>
         </div>
-        <div className="overflow-x-auto">
+        <ul className="grid gap-2 md:hidden">
+          {data?.rows.map((m) => (
+            <li key={`${m.mpKey}|${m.state}`} className="rounded-lg border border-line bg-surface-2 p-3">
+              <p className="font-medium">{m.name}</p>
+              <p className="text-xs text-muted">{m.constituency ?? m.chamber} · {m.state}</p>
+              <p className="mt-1 text-sm">{m.works.toLocaleString("en-IN")} {t.x.works} · {inr(m.disbursed)}</p>
+              <p className="text-xs text-muted">{t.members.photo} {m.works ? Math.round((m.withPhoto / m.works) * 100) : 0}% · {t.x.flagged} {m.flagged}</p>
+              <button className="mt-1 text-sm text-gold underline" onClick={() => onViewWorks(m.mpKey)}>{t.members.view}</button>
+            </li>
+          ))}
+        </ul>
+        <div className="hidden overflow-x-auto md:block">
           <table className="w-full min-w-[760px] text-left text-sm">
             <thead className="text-xs text-muted uppercase">
               <tr><th className="py-2 pr-3">{t.members.name}</th><th className="pr-3">{th(t.members.works, "works")}</th><th className="pr-3 text-right">{th(t.members.disbursed, "disbursed")}</th><th className="pr-3 text-right">{th(t.members.allocated, "allocated")}</th><th className="pr-3">{t.members.photo}</th><th className="pr-3">{th(t.members.flagged, "flagged")}</th><th /></tr>
@@ -58,7 +69,7 @@ export function MembersTab({ t, onViewWorks }: { t: Copy; onViewWorks: (mpKey: s
             </tbody>
           </table>
         </div>
-        <p className="mt-3 text-xs text-muted">Allocation is the amount listed in the official allocation export (term-wide). It is shown for context and is not directly comparable with works completed in 2024–26.</p>
+        <p className="mt-3 text-xs text-muted">{t.x.allocNote}</p>
       </Card>
     </div>
   );

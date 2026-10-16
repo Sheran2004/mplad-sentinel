@@ -1,6 +1,16 @@
 export type Lang = "en" | "hi" | "hing";
 
 const en = {
+  x: {
+    f: { workCode: "Work code", fy: "Financial year", category: "Category", state: "State", ida: "Implementing authority", member: "Member", constituency: "Constituency", completed: "Completed", amount: "Amount disbursed", photo: "Photo on record", yes: "Yes", no: "No", lok: "Lok Sabha", rajya: "Rajya Sabha", unknown: "unknown", na: "Not available" },
+    sev: { critical: "critical", high: "high", watch: "watch", clear: "clear" },
+    flags: { AMOUNT_OUTLIER: "Amount outlier", POSSIBLE_DUPLICATE: "Possible duplicate", SAME_DAY_BATCH: "Same-day batch", HIGH_VALUE_NO_PHOTO: "High value, no photo", MISSING_AMOUNT: "Amount missing", MISSING_DESCRIPTION: "Description missing", DATE_INTEGRITY: "Date inconsistent" } as Record<string, string>,
+    works: "works", members: "members", flagged: "flagged", disbursed: "Disbursed", compare: "Compare with", memberFilter: "Member filter active", clear: "clear",
+    allocNote: "Allocation is the term-wide amount in the official allocation export. It is shown for context and is not directly comparable with works completed in 2024–26.",
+    englishNote: "Indicator explanations are shown in English.",
+    m: { source: "Source", quality: "Data quality", rules: "Screening rules", cannot: "What this tool cannot see", cannotText: "The official export has no vendor, sanctioned amount, physical progress, geo-tag or bill data. Rules that need those fields are intentionally not simulated. A flag means “worth a closer look”; confirm against sanction orders, measurement books, bills and a site visit before drawing any conclusion." },
+    acct: { change: "Change password", current: "Current password", next: "New password (10+)", save: "Update password", done: "Password updated.", close: "Close" },
+  },
   auth: { signIn: "Sign in", signOut: "Sign out", email: "Email", password: "Password", title: "Sign in to MPLAD Sentinel", openMode: "No accounts are configured: anyone can edit. Set ADMIN_EMAIL and ADMIN_PASSWORD to enable accounts.", users: "Users", addUser: "Add user", name: "Name", role: "Role", audit: "Audit log", disable: "Disable", enable: "Enable", resetPw: "Reset password", create: "Create", active: "Active", disabled: "Disabled", last: "Last login", createAccount: "Create account", toRegister: "New here? Create an account", toSignIn: "Already have an account? Sign in", code: "Invite code", fullName: "Full name", registerHint: "New accounts can view everything. An admin can allow you to edit review status and notes.", checking: "Checking your session…", sessionError: "Could not reach the server. Please refresh." },
   name: "MPLAD Sentinel",
   tag: "Screening desk for MPLADS completed works",
@@ -22,6 +32,16 @@ const en = {
 type Copy = typeof en;
 
 const hing: Copy = {
+  x: {
+    f: { workCode: "Work code", fy: "Financial year", category: "Category", state: "State", ida: "Implementing authority", member: "Member", constituency: "Constituency", completed: "Completed", amount: "Disbursed amount", photo: "Photo record", yes: "Haan", no: "Nahi", lok: "Lok Sabha", rajya: "Rajya Sabha", unknown: "pata nahi", na: "Uplabdh nahi" },
+    sev: { critical: "critical", high: "high", watch: "watch", clear: "clear" },
+    flags: { AMOUNT_OUTLIER: "Amount bahut zyada", POSSIBLE_DUPLICATE: "Possible duplicate", SAME_DAY_BATCH: "Same din ka batch", HIGH_VALUE_NO_PHOTO: "Bada amount, photo nahi", MISSING_AMOUNT: "Amount missing", MISSING_DESCRIPTION: "Description missing", DATE_INTEGRITY: "Date galat" } as Record<string, string>,
+    works: "works", members: "members", flagged: "flagged", disbursed: "Disbursed", compare: "Inse compare karo", memberFilter: "Member filter laga hai", clear: "hatao",
+    allocNote: "Allocation official allocation export ka poore term ka amount hai. Ye sirf context ke liye hai, 2024–26 ke completed works se seedha compare nahi hota.",
+    englishNote: "Indicator ki explanation English mein dikhti hai.",
+    m: { source: "Source", quality: "Data quality", rules: "Screening rules", cannot: "Ye tool kya nahi dekh sakta", cannotText: "Official export mein vendor, sanctioned amount, physical progress, geo-tag ya bill ka data nahi hota. Jin rules ko ye fields chahiye unhe jaanbujhkar fake nahi kiya gaya. Flag ka matlab hai “dhyan se dekhne layak”; koi nateeja nikalne se pehle sanction order, measurement book, bills aur site visit se confirm karo." },
+    acct: { change: "Password badlo", current: "Abhi ka password", next: "Naya password (10+)", save: "Password update karo", done: "Password update ho gaya.", close: "Band karo" },
+  },
   auth: { signIn: "Sign in", signOut: "Sign out", email: "Email", password: "Password", title: "MPLAD Sentinel mein sign in karo", openMode: "Koi account configure nahi hai: koi bhi edit kar sakta hai. Accounts ke liye ADMIN_EMAIL aur ADMIN_PASSWORD set karo.", users: "Users", addUser: "User jodo", name: "Naam", role: "Role", audit: "Audit log", disable: "Disable", enable: "Enable", resetPw: "Password reset", create: "Banao", active: "Active", disabled: "Disabled", last: "Last login", createAccount: "Account banao", toRegister: "Naye ho? Account banao", toSignIn: "Account hai? Sign in karo", code: "Invite code", fullName: "Poora naam", registerHint: "Naye account se sab kuch dekh sakte ho. Review status aur notes edit karne ki permission admin deta hai.", checking: "Session check ho raha hai…", sessionError: "Server tak nahi pahunch paye. Page refresh karo." },
   name: "MPLAD Sentinel",
   tag: "MPLADS ke completed works ki screening desk",
@@ -41,6 +61,16 @@ const hing: Copy = {
 };
 
 const hi: Copy = {
+  x: {
+    f: { workCode: "कार्य कोड", fy: "वित्त वर्ष", category: "श्रेणी", state: "राज्य", ida: "कार्यान्वयन प्राधिकरण", member: "सांसद", constituency: "निर्वाचन क्षेत्र", completed: "पूर्ण तिथि", amount: "वितरित राशि", photo: "फ़ोटो दर्ज", yes: "हाँ", no: "नहीं", lok: "लोक सभा", rajya: "राज्य सभा", unknown: "अज्ञात", na: "उपलब्ध नहीं" },
+    sev: { critical: "गंभीर", high: "उच्च", watch: "निगरानी", clear: "ठीक" },
+    flags: { AMOUNT_OUTLIER: "राशि बहुत अधिक", POSSIBLE_DUPLICATE: "संभावित दोहराव", SAME_DAY_BATCH: "एक ही दिन का बैच", HIGH_VALUE_NO_PHOTO: "अधिक राशि, फ़ोटो नहीं", MISSING_AMOUNT: "राशि नहीं", MISSING_DESCRIPTION: "विवरण नहीं", DATE_INTEGRITY: "तारीख़ असंगत" } as Record<string, string>,
+    works: "कार्य", members: "सांसद", flagged: "चिह्नित", disbursed: "वितरित", compare: "इनसे तुलना करें", memberFilter: "सांसद फ़िल्टर लगा है", clear: "हटाएँ",
+    allocNote: "आवंटन आधिकारिक आवंटन निर्यात में पूरे कार्यकाल की राशि है। यह केवल संदर्भ के लिए है, 2024–26 के पूर्ण कार्यों से सीधे तुलनीय नहीं।",
+    englishNote: "संकेतकों की व्याख्या अंग्रेज़ी में दिखती है।",
+    m: { source: "स्रोत", quality: "डेटा गुणवत्ता", rules: "स्क्रीनिंग नियम", cannot: "यह टूल क्या नहीं देख सकता", cannotText: "आधिकारिक निर्यात में विक्रेता, स्वीकृत राशि, भौतिक प्रगति, जियो-टैग या बिल का डेटा नहीं होता। जिन नियमों को ये फ़ील्ड चाहिए उन्हें जानबूझकर नहीं बनाया गया। चिह्न का अर्थ है “ध्यान से देखने योग्य”; कोई निष्कर्ष निकालने से पहले स्वीकृति आदेश, माप पुस्तिका, बिल और स्थल निरीक्षण से पुष्टि करें।" },
+    acct: { change: "पासवर्ड बदलें", current: "वर्तमान पासवर्ड", next: "नया पासवर्ड (10+)", save: "पासवर्ड अपडेट करें", done: "पासवर्ड अपडेट हो गया।", close: "बंद करें" },
+  },
   auth: { signIn: "साइन इन", signOut: "साइन आउट", email: "ईमेल", password: "पासवर्ड", title: "MPLAD Sentinel में साइन इन करें", openMode: "कोई खाता कॉन्फ़िगर नहीं है: कोई भी संपादन कर सकता है। खाते चालू करने के लिए ADMIN_EMAIL और ADMIN_PASSWORD सेट करें।", users: "उपयोगकर्ता", addUser: "उपयोगकर्ता जोड़ें", name: "नाम", role: "भूमिका", audit: "ऑडिट लॉग", disable: "निष्क्रिय करें", enable: "सक्रिय करें", resetPw: "पासवर्ड रीसेट", create: "बनाएँ", active: "सक्रिय", disabled: "निष्क्रिय", last: "अंतिम लॉगिन", createAccount: "खाता बनाएँ", toRegister: "नए हैं? खाता बनाएँ", toSignIn: "खाता है? साइन इन करें", code: "आमंत्रण कोड", fullName: "पूरा नाम", registerHint: "नया खाता सब कुछ देख सकता है। समीक्षा स्थिति और टिप्पणी बदलने की अनुमति एडमिन देता है।", checking: "सत्र जाँचा जा रहा है…", sessionError: "सर्वर तक नहीं पहुँच सके। कृपया पेज रीफ़्रेश करें।" },
   name: "एमपीलैड सेंटिनल",
   tag: "एमपीलैड्स पूर्ण कार्यों की स्क्रीनिंग डेस्क",

@@ -17,8 +17,8 @@ export function CasesTab({ t, onOpen, refreshKey }: { t: Copy; onOpen: (code: st
             <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="font-medium">{c.workType ?? c.workCode}</span>
               <span className="flex items-center gap-2 text-sm">
-                {c.severity && <SeverityPill severity={c.severity as Severity} risk={c.risk ?? undefined} />}
-                <span className="rounded-full bg-surface-2 px-2 py-0.5 text-xs capitalize">{c.status}</span>
+                {c.severity && <SeverityPill severity={c.severity as Severity} risk={c.risk ?? undefined} label={t.x.sev[c.severity as Severity]} />}
+                <span className="rounded-full bg-surface-2 px-2 py-0.5 text-xs">{c.status === "reviewed" ? t.detail.reviewed : c.status === "dismissed" ? t.detail.dismissed : t.detail.open}</span>
               </span>
             </div>
             <p className="text-xs text-muted">{c.workCode} · {c.state} · {inr(c.amount)} · {new Date(c.updatedAt).toLocaleString()}</p>

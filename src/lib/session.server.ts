@@ -181,6 +181,26 @@ export async function register(sql: Sql, input: { name: unknown; email: unknown;
   return { id, email, name, role: "viewer" };
 }
 
+/** Signed-in users change their own password. Wrong current passwords count toward the login lockout. */
+export async function changeOwnPassword(sql: Sql, currentRaw: unknown, nextRaw: unknown): Promise<void> {
+  await assertSameSite();
+  const actor = await getActor(sql);
+  if (!actor) throw new Error("Sign in required.");
+  const fails = await sql.query<{ n: number }>(
+    "SELECT count(*) AS n FROM mplad_audit_log WHERE action = 'login_failed' AND user_email = $1 AND at > NOW() - INTERVAL '10 minutes'",
+    [actor.email],
+  );
+  if (Number(fails[0]?.n ?? 0) >= LOCK_AFTER) throw new Error("Too many failed attempts. Try again in a few minutes.");
+  const next = validatePassword(nextRaw);
+  const rows = await sql.query<{ password_hash: string }>("SELECT password_hash FROM mplad_users WHERE id = $1", [actor.id]);
+  if (!rows[0] || !(await verifyPassword(String(currentRaw ?? "").slice(0, 200), rows[0].password_hash))) {
+    await audit(sql, { id: null, email: actor.email }, "login_failed", null, { via: "change_password" });
+    throw new Error("Current password is incorrect.");
+  }
+  await sql.query("UPDATE mplad_users SET password_hash = $2 WHERE id = $1", [actor.id, await hashPassword(next)]);
+  await audit(sql, { id: actor.id, email: actor.email }, "password_changed", null);
+}
+
 export function logout() {
   deleteCookie(COOKIE, { path: "/" });
 }

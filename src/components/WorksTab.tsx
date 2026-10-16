@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Download, RotateCcw } from "lucide-react";
 import { exportWorksCsv, getFacets, searchWorks } from "@/lib/api";
 import { DEFAULT_FILTERS, toRequest, type Filters } from "@/lib/filters";
-import { FLAG_LABEL, type Copy } from "@/lib/i18n";
+import type { Copy } from "@/lib/i18n";
 import { inr, shortType } from "@/lib/format";
 import { Card, ErrorNote, SeverityPill, inputCls, useAsync, useDebounced } from "./ui";
 
@@ -56,11 +56,11 @@ export function WorksTab({ t, filters, setFilters, onOpen }: { t: Copy; filters:
           <select className={inputCls} value={filters.severity} onChange={(e) => patch({ severity: e.target.value })}>
             <option value="">{t.filters.allSev}</option>
             <option value="flagged">{t.filters.flagged}</option>
-            {["critical", "high", "watch", "clear"].map((s) => <option key={s} value={s}>{s}</option>)}
+            {(["critical", "high", "watch", "clear"] as const).map((s) => <option key={s} value={s}>{t.x.sev[s]}</option>)}
           </select>
           <select className={inputCls} value={filters.flag} onChange={(e) => patch({ flag: e.target.value })}>
             <option value="">{t.filters.anyFlag}</option>
-            {f?.flags.map((s) => <option key={s.code} value={s.code}>{FLAG_LABEL[s.code] ?? s.code} ({s.count})</option>)}
+            {f?.flags.map((s) => <option key={s.code} value={s.code}>{t.x.flags[s.code] ?? s.code} ({s.count})</option>)}
           </select>
           <select className={inputCls} value={filters.photo} onChange={(e) => patch({ photo: e.target.value as Filters["photo"] })}>
             <option value="">{t.filters.anyPhoto}</option>
@@ -74,7 +74,7 @@ export function WorksTab({ t, filters, setFilters, onOpen }: { t: Copy; filters:
           </div>
         </div>
         {filters.mpKey && (
-          <p className="mt-2 text-xs text-muted">Member filter active · <button className="underline" onClick={() => patch({ mpKey: "" })}>clear</button></p>
+          <p className="mt-2 text-xs text-muted">{t.x.memberFilter} · <button className="underline" onClick={() => patch({ mpKey: "" })}>{t.x.clear}</button></p>
         )}
         {exportError && <div className="mt-2"><ErrorNote message={exportError} /></div>}
       </Card>
@@ -82,14 +82,25 @@ export function WorksTab({ t, filters, setFilters, onOpen }: { t: Copy; filters:
       {res.error && <ErrorNote message={res.error} />}
       <Card>
         <div className="mb-2 flex flex-wrap items-center justify-between gap-2 text-sm text-muted">
-          <span>{data ? `${data.total.toLocaleString("en-IN")} works · ${inr(data.amount)} · ${data.flagged.toLocaleString("en-IN")} flagged` : t.loading}</span>
+          <span>{data ? `${data.total.toLocaleString("en-IN")} ${t.x.works} · ${inr(data.amount)} · ${data.flagged.toLocaleString("en-IN")} ${t.x.flagged}` : t.loading}</span>
           <span className="flex items-center gap-2">
             <button className={inputCls} disabled={filters.page <= 0} onClick={() => patch({ page: filters.page - 1 })}>{t.prev}</button>
             <span>{filters.page + 1} / {pages}</span>
             <button className={inputCls} disabled={filters.page + 1 >= pages} onClick={() => patch({ page: filters.page + 1 })}>{t.next}</button>
           </span>
         </div>
-        <div className="overflow-x-auto">
+        <ul className="grid gap-2 md:hidden">
+          {data?.rows.map((w) => (
+            <li key={w.workCode} className="cursor-pointer rounded-lg border border-line bg-surface-2 p-3" onClick={() => onOpen(w.workCode)}>
+              <div className="flex items-start justify-between gap-2"><span className="font-medium">{w.workType}</span><SeverityPill severity={w.severity} risk={w.risk} label={t.x.sev[w.severity]} /></div>
+              <p className="mt-1 text-xs text-muted">{w.workCode}</p>
+              <p className="mt-1 text-sm">{w.mpName} · {w.state}</p>
+              <p className="text-sm text-muted">{w.completionDate} · {inr(w.amount)}</p>
+              {w.flagCodes.length > 0 && <p className="mt-1 text-xs text-gold">{w.flagCodes.map((c) => t.x.flags[c] ?? c).join(", ")}</p>}
+            </li>
+          ))}
+        </ul>
+        <div className="hidden overflow-x-auto md:block">
           <table className="w-full min-w-[860px] text-left text-sm">
             <thead className="text-xs text-muted uppercase">
               <tr>
@@ -111,8 +122,8 @@ export function WorksTab({ t, filters, setFilters, onOpen }: { t: Copy; filters:
                   <td className="pr-3">{w.mpName}<div className="text-xs text-muted">{w.constituency ?? w.chamber}</div></td>
                   <td className="pr-3 whitespace-nowrap">{w.completionDate}</td>
                   <td className="pr-3 text-right whitespace-nowrap">{inr(w.amount)}</td>
-                  <td className="pr-3"><SeverityPill severity={w.severity} risk={w.risk} /></td>
-                  <td className="text-xs text-muted">{w.flagCodes.map((c) => FLAG_LABEL[c] ?? c).join(", ") || "—"}{!w.hasImage && w.flagCodes.length === 0 ? "" : ""}</td>
+                  <td className="pr-3"><SeverityPill severity={w.severity} risk={w.risk} label={t.x.sev[w.severity]} /></td>
+                  <td className="text-xs text-muted">{w.flagCodes.map((c) => t.x.flags[c] ?? c).join(", ") || "—"}</td>
                 </tr>
               ))}
             </tbody>

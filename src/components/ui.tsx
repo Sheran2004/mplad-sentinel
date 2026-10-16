@@ -16,10 +16,10 @@ export function Card({ title, children, className = "", action }: { title?: stri
   );
 }
 
-export function SeverityPill({ severity, risk }: { severity: Severity; risk?: number }) {
+export function SeverityPill({ severity, risk, label }: { severity: Severity; risk?: number; label?: string }) {
   return (
     <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold capitalize ${tone[severity]}`}>
-      {severity}
+      {label ?? severity}
       {risk !== undefined && <span className="opacity-80">{risk}</span>}
     </span>
   );

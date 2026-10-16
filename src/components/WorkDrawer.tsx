@@ -33,10 +33,10 @@ export function WorkDrawer({ code, t, canWrite, signedIn, onNeedLogin, onClose, 
 
   const w = d?.work;
   const fields: [string, string][] = w ? [
-    ["Work code", w.workCode], ["Financial year", w.fy], ["Category", w.category], ["State", w.state], ["Implementing authority", w.ida],
-    ["Member", `${w.mpName} (${w.chamber === "LS" ? "Lok Sabha" : w.chamber === "RS" ? "Rajya Sabha" : "unknown"})`],
-    ["Constituency", w.constituency ?? "Not available"], ["Completed", w.completionDate],
-    ["Amount disbursed", inrFull(w.amount)], ["Photo on record", w.hasImage ? "Yes" : "No"],
+    [t.x.f.workCode, w.workCode], [t.x.f.fy, w.fy], [t.x.f.category, w.category], [t.x.f.state, w.state], [t.x.f.ida, w.ida],
+    [t.x.f.member, `${w.mpName} (${w.chamber === "LS" ? t.x.f.lok : w.chamber === "RS" ? t.x.f.rajya : t.x.f.unknown})`],
+    [t.x.f.constituency, w.constituency ?? t.x.f.na], [t.x.f.completed, w.completionDate],
+    [t.x.f.amount, w.amount === null ? t.x.f.na : inrFull(w.amount)], [t.x.f.photo, w.hasImage ? t.x.f.yes : t.x.f.no],
   ] : [];
 
   return (
@@ -45,7 +45,7 @@ export function WorkDrawer({ code, t, canWrite, signedIn, onNeedLogin, onClose, 
         <div className="flex items-start justify-between gap-3">
           <div>
             <h2 className="font-display text-xl font-semibold">{w?.workType ?? code}</h2>
-            {w && <div className="mt-1"><SeverityPill severity={w.severity} risk={w.risk} /></div>}
+            {w && <div className="mt-1"><SeverityPill severity={w.severity} risk={w.risk} label={t.x.sev[w.severity]} /></div>}
           </div>
           <button aria-label={t.detail.close} onClick={onClose} className="rounded-lg p-2 hover:bg-surface-2"><X size={18} /></button>
         </div>
@@ -55,7 +55,7 @@ export function WorkDrawer({ code, t, canWrite, signedIn, onNeedLogin, onClose, 
           <div className="mt-4 grid gap-5">
             {w.description && <p className="text-sm">{w.description}</p>}
             <section>
-              <h3 className="mb-2 text-xs font-semibold text-muted uppercase">{t.detail.why}</h3>
+              <h3 className="mb-2 text-xs font-semibold text-muted uppercase">{t.detail.why} <span className="font-normal normal-case">({t.x.englishNote})</span></h3>
               {d.flags.length === 0 ? <p className="text-sm text-muted">{t.detail.none}</p> : (
                 <ul className="grid gap-2">
                   {d.flags.map((f) => (
@@ -63,7 +63,7 @@ export function WorkDrawer({ code, t, canWrite, signedIn, onNeedLogin, onClose, 
                       <div className="flex justify-between gap-2 font-medium"><span>{f.title}</span><span className="text-muted">+{f.points}</span></div>
                       <p className="mt-1 text-muted">{f.explanation}</p>
                       {Array.isArray((f.evidence as unknown as { others?: unknown[] }).others) && (
-                        <p className="mt-1 text-xs text-muted">Compare with: {((f.evidence as unknown as { others: { workCode: string }[] }).others).map((o) => o.workCode).join(", ")}</p>
+                        <p className="mt-1 text-xs text-muted">{t.x.compare}: {((f.evidence as unknown as { others: { workCode: string }[] }).others).map((o) => o.workCode).join(", ")}</p>
                       )}
                     </li>
                   ))}

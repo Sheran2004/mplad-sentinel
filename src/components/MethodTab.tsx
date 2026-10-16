@@ -21,7 +21,7 @@ export function MethodTab({ t }: { t: Copy }) {
   ];
   return (
     <div className="grid gap-4">
-      <Card title="Source">
+      <Card title={t.x.m.source}>
         {q ? (
           <div className="grid gap-1 text-sm">
             <p>{q.generatedFrom.source} — retrieved {q.generatedFrom.retrievedDate}.</p>
@@ -32,7 +32,7 @@ export function MethodTab({ t }: { t: Copy }) {
         ) : <p className="text-muted">{t.loading}</p>}
       </Card>
       {q && (
-        <Card title="Data quality">
+        <Card title={t.x.m.quality}>
           <ul className="grid gap-2 text-sm">
             {q.findings.map((f, i) => <li key={i} className="rounded-lg border border-warn/40 bg-warn/10 p-3">{f}</li>)}
             <li>Rows: Lok Sabha export {n(q.rows.lokSabhaExport)} · Rajya Sabha export {n(q.rows.rajyaSabhaExport)} · unique works {n(q.rows.unionUnique)} · unparsed {q.rows.unparsedWorkCodes}</li>
@@ -42,14 +42,14 @@ export function MethodTab({ t }: { t: Copy }) {
           </ul>
         </Card>
       )}
-      <Card title="Screening rules">
+      <Card title={t.x.m.rules}>
         <ul className="grid gap-3 text-sm">
           {rules.map(([k, v]) => <li key={k}><span className="font-medium">{k}.</span> <span className="text-muted">{v}</span></li>)}
         </ul>
         <p className="mt-3 text-sm text-muted">Risk = sum of points, capped at 100. Severity: {SEVERITY_CUTOFFS.filter((s) => s.severity !== "clear").map((s) => `${s.severity} ≥ ${s.min}`).join(", ")}.</p>
       </Card>
-      <Card title="What this tool cannot see">
-        <p className="text-sm text-muted">The official export has no vendor, sanctioned amount, physical progress, geo-tag or bill data. Rules that need those fields (spend vs progress, vendor concentration, location checks) are intentionally not simulated. A flag means “worth a closer look”; confirm against sanction orders, measurement books, bills and a site visit before drawing any conclusion.</p>
+      <Card title={t.x.m.cannot}>
+        <p className="text-sm text-muted">{t.x.m.cannotText}</p>
       </Card>
     </div>
   );

@@ -40,6 +40,17 @@ export const registerAccount = createServerFn({ method: "POST" })
     return s.register(sql, data);
   });
 
+export const changePassword = createServerFn({ method: "POST" })
+  .validator((i: unknown) => {
+    const v = (i ?? {}) as Record<string, unknown>;
+    return { current: String(v.current ?? "").slice(0, 250), next: String(v.next ?? "").slice(0, 250) };
+  })
+  .handler(async ({ data }) => {
+    const { sql, s } = await ready();
+    await s.changeOwnPassword(sql, data.current, data.next);
+    return { ok: true as const };
+  });
+
 export const signOut = createServerFn({ method: "POST" }).handler(async () => {
   const { s } = await ready();
   await s.assertSameSite();

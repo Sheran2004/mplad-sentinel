@@ -75,7 +75,8 @@ Admins promote people to reviewer in the **Admin** tab. `SESSION_SECRET` (32+ ra
 Safeguards: failed-login lockout (5 tries / 10 min per email) and sign-up rate limit (8 / hour per IP) are stored in the
 database so they hold on serverless hosts; passwords are scrypt-hashed; the session cookie is httpOnly and signed; the
 last active admin cannot be demoted or disabled. With no accounts configured the app is in open mode (local use only).
-There is no email verification or password-reset email: an admin resets passwords.
+Signed-in users change their own password by clicking their name in the header. There is no email verification or
+password-reset email: if someone forgets their password, an admin resets it in the Admin tab.
 
 ## Deploy (Vercel + Neon/Postgres)
 

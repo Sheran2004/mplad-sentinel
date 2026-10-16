@@ -19,7 +19,7 @@ export function OverviewTab({ t, onOpenState, onOpenSeverity }: { t: Copy; onOpe
     [t.kpi.states, String(k.states)],
     [t.kpi.members, String(k.members)],
   ];
-  const sev = ["critical", "high", "watch", "clear"].map((s) => ({ name: s, value: data.severity[s] ?? 0 }));
+  const sev = (["critical", "high", "watch", "clear"] as const).map((s) => ({ key: s, name: t.x.sev[s], value: data.severity[s] ?? 0 }));
   const axis = { stroke: "var(--color-muted)", fontSize: 11 } as const;
   const tip = { contentStyle: { background: "var(--color-surface)", border: "1px solid var(--color-line)", borderRadius: 8, color: "var(--color-fg)" } };
   return (
@@ -43,7 +43,7 @@ export function OverviewTab({ t, onOpenState, onOpenSeverity }: { t: Copy; onOpe
                 <CartesianGrid stroke="var(--color-line)" strokeDasharray="3 3" />
                 <XAxis dataKey="month" {...axis} minTickGap={24} />
                 <YAxis {...axis} unit=" cr" width={56} />
-                <Tooltip {...tip} formatter={(v: number) => [`₹${v.toFixed(1)} cr`, "Disbursed"]} />
+                <Tooltip {...tip} formatter={(v: number) => [`₹${v.toFixed(1)} cr`, t.x.disbursed]} />
                 <Area dataKey="cr" stroke="var(--color-gold)" fill="var(--color-gold)" fillOpacity={0.18} />
               </AreaChart>
             </ResponsiveContainer>
@@ -52,13 +52,13 @@ export function OverviewTab({ t, onOpenState, onOpenSeverity }: { t: Copy; onOpe
         <Card title={t.charts.severity}>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={sev} onClick={(e) => { const n = e?.activeLabel; if (n && n !== "clear") onOpenSeverity(String(n)); }}>
+              <BarChart data={sev} onClick={(e) => { const lbl = e?.activeLabel; const hit = sev.find((x) => x.name === lbl); if (hit && hit.key !== "clear") onOpenSeverity(hit.key); }}>
                 <CartesianGrid stroke="var(--color-line)" strokeDasharray="3 3" />
                 <XAxis dataKey="name" {...axis} />
                 <YAxis {...axis} width={56} />
                 <Tooltip {...tip} />
                 <Bar dataKey="value" radius={[6, 6, 0, 0]}>
-                  {sev.map((s) => <Cell key={s.name} fill={SEV_COLOR[s.name]} />)}
+                  {sev.map((s) => <Cell key={s.key} fill={SEV_COLOR[s.key]} />)}
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
@@ -71,7 +71,7 @@ export function OverviewTab({ t, onOpenState, onOpenSeverity }: { t: Copy; onOpe
                 <CartesianGrid stroke="var(--color-line)" strokeDasharray="3 3" />
                 <XAxis type="number" {...axis} unit=" cr" />
                 <YAxis type="category" dataKey="state" {...axis} width={110} />
-                <Tooltip {...tip} formatter={(v: number) => [`₹${v.toFixed(1)} cr`, "Disbursed"]} />
+                <Tooltip {...tip} formatter={(v: number) => [`₹${v.toFixed(1)} cr`, t.x.disbursed]} />
                 <Bar dataKey="cr" fill="var(--color-gold)" radius={[0, 6, 6, 0]} onClick={(d) => onOpenState((d as unknown as { state: string }).state)} />
               </BarChart>
             </ResponsiveContainer>
